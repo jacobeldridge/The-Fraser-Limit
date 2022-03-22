@@ -34,7 +34,8 @@ class Input:
             "This input must be a whole number", 
             "This input must be a real number", 
             "Please type 'y' or 'n'",
-            "Please enter a valid preset"
+            "Please enter a valid preset",
+            "|B| must be greater than 1"
             ]
 
         self.input_requirements = []
@@ -44,14 +45,20 @@ class Input:
             "int": self.must_be_int,
             "float": self.must_be_float,
             "y_n": self.must_be_y_n,
-            "preset": self.preset
+            "preset": self.preset,
+            "greater_0": self.greater_0
         }
 
         for paramater in paramaters.values():
             #paramater should be a string
             new_requirement = paramater_dict[paramater]
             self.input_requirements.append(new_requirement)
-
+    def greater_0(self):
+        if abs(float(self.user_input)) > 1:
+            return True
+        else:
+            print(self.errors[5])
+            return False
     def must_be_filled(self):
         if (self.user_input == "") or (self.user_input == " "):
             print(self.errors[0])
@@ -202,7 +209,7 @@ def new_session():
     
     elif randorgen == "input":
         a_input = Input(text="Value for A: ",on_enter=None, parameter1='filled',paramater2='float')
-        b_input = Input(text="Value for B: ",on_enter=None, parameter1='filled',paramater2='float')
+        b_input = Input(text="Value for B: ",on_enter=None, parameter1='filled',paramater2='float',paramater3='greater_0')
         c_input = Input(text="Value for C: ",on_enter=None, parameter1='filled',paramater2='float')
         new_screen()
         a = float(a_input.call_input())
@@ -283,7 +290,7 @@ def main_process(error_allowed=None,pause=None,preset=None):
 #-----------------------------------------------------------------------------
 def prep():
     error_range_input = Input(text="Allowed range of error (10^-{your_input}): ",on_enter=None,parameter1='filled',paramater2='int')
-    time_delay_input = Input(text="Delay between self.iterations: ",on_enter=None,parameter1='filled',paramater2='float')
+    time_delay_input = Input(text="Delay between iterations (seconds): ",on_enter=None,parameter1='filled',paramater2='float')
     new_screen()
     error_range = int(error_range_input.call_input())
     new_screen()
